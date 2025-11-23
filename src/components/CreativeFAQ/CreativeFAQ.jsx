@@ -90,13 +90,21 @@ export default function CreativeFAQ() {
 
           {/* Right side: Single image */}
           <div className="flex-shrink-0 w-full md:w-96 h-auto">
-            <Image
-              src="/images/faq-right.png" // replace with your image path
-              alt="FAQ Illustration"
-              width={384}
-              height={384}
-              className="object-contain"
-            />
+            <div className="flex flex-col w-full md:w-96 gap-6">
+
+  {/* First Image */}
+  <Image
+    src="/about/image.jpg"
+    alt="FAQ Image 1"
+    width={384}
+    height={390}
+    className="object-contain"
+  />
+
+  
+
+</div>
+
           </div>
         </div>
       </div>

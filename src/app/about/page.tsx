@@ -15,7 +15,7 @@ import {
   Phone,
   Star,
 } from "lucide-react";
-import CreativeaFAQ from "@/components/CreativeFAQ/CreativeFAQ";
+import CreativeaFAQ from "@/components/CreativeFAQ/CreativeFAQ"
 import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
 import Image from "next/image";
@@ -115,7 +115,7 @@ export default function AboutPage() {
     "Data Analysis Using SPSS, Python, R, MATLAB",
     "Plagiarism Checking, Correction & Proofreading",
     "Journal Submission Guidance",
-    "Plagiarism Checking, Correction & Proofreading",
+    
     "Research Paper Writing & Publication (Scopus, UGC Care, SCI)",
     "End-to-End Research Mentoring"
   ];

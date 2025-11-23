@@ -33,7 +33,7 @@ export default function Navigation() {
   ];
 
   return (
-    <nav className="sticky top-0 z-50 bg-white shadow-lg">
+    <nav className=" top-0 z-50 bg-white shadow-lg">
       <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
         {/* Navbar Row */}
         <div className="flex items-center justify-between h-24 md:h-28">

@@ -351,7 +351,7 @@ export default function ContactPage() {
                     </FloatingIcon>
                     <h3 className="text-xl font-semibold text-gray-900 mb-3">Visit Us</h3>
                     <p className="text-gray-700 font-medium">
-                      73 Pannalal Nagar,Ch.Sambhaji Nagar, India<br />India
+                      73 Pannalal Nagar,Ch.Sambhaji Nagar, India
                     </p>
                     <p className="text-gray-600 text-sm mt-2">By appointment only</p>
                   </div>
@@ -370,7 +370,7 @@ export default function ContactPage() {
             <p className="text-lg text-gray-600 mb-8">
               Check out our FAQ page for quick answers to common questions
             </p>
-            <Link href="/faq">
+            <Link href="/about#CreativeFAQ">
               <button className="group relative bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 transform hover:-translate-y-1 shadow-lg hover:shadow-2xl overflow-hidden">
                 <span className="relative z-10 flex items-center gap-2 justify-center">
                   View FAQ

@@ -11,6 +11,8 @@ import besideSEOServices from '../../../Images/Beside_SEO_Services_and_Drupal_De
 import besideWebDesign from '../../../Images/Beside_Web_Design.png';
 import besideWordPress from '../../../Images/Beside_WordPress Development.png';
 import besideMobileApp from '../../../Images/Beside_Mobile_App.png';
+import Navigation from '@/components/navigation';
+import Footer from '@/components/footer';
 
 export default function ServicesPage() {
   const categories = [
@@ -69,6 +71,7 @@ export default function ServicesPage() {
   return (
     <div className="min-h-screen w-full bg-gradient-to-b from-sky-50 via-white to-slate-50 overflow-x-hidden font-inter">
       {/* 🌟 HERO SECTION */}
+      <Navigation/>
       <section className="relative py-28 text-white bg-gradient-to-r from-sky-900 via-sky-800 to-slate-900 overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <Image
@@ -244,6 +247,7 @@ export default function ServicesPage() {
           </div>
         </div>
       </section>
+      <Footer/>
     </div>
   );
 }
