@@ -7,7 +7,7 @@ export default function ChatWidget() {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      content: 'Hello! I\'m here to help you with PhD research services from Creator Research Pvt Ltd. How can I assist you today?',
+      content: 'Hello! I\'m here to help you from Creator Research Pvt Ltd. How can I assist you today?',
     },
   ]);
   const [input, setInput] = useState('');
@@ -170,7 +170,7 @@ export default function ChatWidget() {
                     sendMessage(e);
                   }
                 }}
-                placeholder="Ask about our PhD services..."
+                placeholder="Type your message..."
                 className="flex-1 border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent text-gray-800 text-sm"
                 disabled={isLoading}
               />
