@@ -38,14 +38,20 @@ export default function Navigation() {
           <Link href="/" className="flex items-center h-full">
             <div className="relative h-full w-32 md:w-40 flex-shrink-0">
              <div className="flex items-center">
-<Image
-  src="/logo.png"
-  alt="Creator Research Pvt Ltd"
-  width={300}
-  height={190}
-  className="object-cover"
-  priority
-/>
+<Link href="/" className="flex items-center h-full">
+  <div className="relative h-24 md:h-28 w-52 md:w-64">
+
+    <Image
+      src="/logo.png"
+      alt="Creator Research Pvt Ltd"
+      fill
+      className="object-contain"
+      priority
+    />
+  </div>
+</Link>
+
+
 
 </div>
 
