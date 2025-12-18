@@ -180,7 +180,7 @@ export function ContactForm({ className }: ContactFormProps) {
     try {
       const captchaToken = await getCaptchaToken();
 
-      const response = await fetch("/api/contacts1", {
+      const response = await fetch("/api/contacts", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

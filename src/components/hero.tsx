@@ -77,37 +77,13 @@ export default function Hero() {
       >
         {/* Enhanced Welcome Badge with Animation */}
         <div className="mb-6 inline-block">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.5, y: -30 }}
-            animate={{ 
-              opacity: 1, 
-              scale: 1,
-              y: 0
-            }}
-            transition={{ 
-              delay: 0.2, 
-              duration: 0.8,
-              type: "spring",
-              stiffness: 200,
-              damping: 15
-            }}
-          >
-            <motion.span
-              animate={{ 
-                scale: [1, 1.08, 1],
-                rotate: [0, 2, -2, 0]
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                repeatType: "reverse"
-              }}
-              className={`${inter.className} text-base md:text-lg lg:text-xl font-extrabold text-transparent bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text px-6 py-3 rounded-full border-2 border-blue-400 shadow-2xl inline-block bg-white/80 backdrop-blur-sm`}
-            >
-              Welcome to Creator Research PVT. LTD.
-            </motion.span>
-          </motion.div>
-        </div>
+  <span
+    className={`${inter.className} text-base md:text-lg lg:text-xl font-extrabold text-transparent bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text px-6 py-3 rounded-full border-2 border-blue-400 shadow-2xl inline-block bg-white/80 backdrop-blur-sm`}
+  >
+    Welcome to Creator Research PVT. LTD.
+  </span>
+</div>
+
 
         <motion.h1
           initial={{ opacity: 0, y: 30 }}

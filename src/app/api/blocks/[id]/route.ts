@@ -6,7 +6,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getBlockById, updateBlock, deleteBlock } from '@/lib/db-enhanced';
+import { getBlockById, updateBlock, deleteBlock } from '@/lib/blocks-prisma';
 import { updateBlockSchema } from '@/lib/validations';
 import { ApiResponse } from '@/lib/types';
 import { HTTP_STATUS, SUCCESS_MESSAGES, ERROR_MESSAGES } from '@/lib/constants';

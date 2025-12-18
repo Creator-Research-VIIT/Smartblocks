@@ -1,39 +1,55 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
-
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-model ContactMessage {
-  id              Int      @id @default(autoincrement())
-  name            String
-  email           String
-  phone           String
-  countryCode     String   @default("+91")
-  company         String?
-  subject         String
-  serviceInterest String?
-  budgetRange     String?
-  message         String
-  isVerified      Boolean  @default(false)
-  captchaScore    Float?
-  ipAddress       String?
-  userAgent       String?
-  status          String   @default("new") // 'new', 'in_progress', 'replied', 'closed', 'spam'
-  adminNotes      String?
-  repliedAt       DateTime?
-  repliedBy       String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
 }
 
+
+model Block {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  url         String
+  color       String
+  category    String
+
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt      @map("updated_at")
+
+  @@map("blocks")
+  @@index([category], map: "idx_blocks_category")
+  @@index([createdAt], map: "idx_blocks_created_at")
+  @@index([url], map: "idx_blocks_url")
+  @@unique([url], map: "uniq_blocks_url")
+}
+
+model ContactMessage {
+  id             Int       @id @default(autoincrement())
+  name           String
+  email          String
+  phone          String
+  countryCode    String     @map("country_code")
+  company        String?
+  subject        String
+  serviceInterest String?   @map("service_interest")
+  budgetRange    String?    @map("budget_range")
+  message        String
+  isVerified     Boolean    @default(false) @map("is_verified")
+  captchaScore   Float?     @map("captcha_score")
+  ipAddress      String?    @map("ip_address")
+  userAgent      String?    @map("user_agent")
+  status         String     @default("new")
+  adminNotes     String?    @map("admin_notes")
+  repliedAt      DateTime?  @map("replied_at")
+  repliedBy      String?    @map("replied_by")
+
+  createdAt      DateTime   @default(now()) @map("created_at")
+  updatedAt      DateTime   @updatedAt      @map("updated_at")
+
+  @@map("contact_messages")
+  @@index([status], map: "idx_contact_messages_status")
+  @@index([createdAt], map: "idx_contact_messages_created_at")
+  @@index([email], map: "idx_contact_messages_email")
+}

@@ -1,113 +1,61 @@
-/**
- * Health check endpoint for Smart Block Project API
- * GET /api/health - Check API and database health
- */
+import { NextResponse } from 'next/server';
+import prisma from '@/lib/prisma';
 
-import { NextRequest, NextResponse } from 'next/server';
-import { healthCheck, getBlocksStats } from '@/lib/db-enhanced';
-import { HTTP_STATUS } from '@/lib/constants';
-
-interface HealthResponse {
-  status: 'healthy' | 'unhealthy';
-  timestamp: string;
-  version: string;
-  uptime: number;
-  database: {
-    status: 'connected' | 'error';
-    latency?: number;
-  };
-  stats?: {
-    totalBlocks: number;
-    categories: number;
-    recentBlocks: number;
-  };
-  error?: string;
-}
-
-/**
- * GET /api/health
- * Comprehensive health check including database connectivity and stats
- */
-export async function GET(request: NextRequest) {
-  const startTime = Date.now();
-  const uptime = process.uptime();
-  
+export async function GET() {
+  const started = Date.now();
   try {
-    // Test database connection
-    const dbStart = Date.now();
-    const dbHealth = await healthCheck();
-    const dbLatency = Date.now() - dbStart;
-    
-    // Get basic stats (optional, comment out if too slow)
-    let stats;
+    // DB connectivity check
+    const dbStarted = Date.now();
+    await prisma.$queryRaw`SELECT 1`;
+    const dbLatency = Date.now() - dbStarted;
+
+    // Basic stats (non-fatal if they fail)
+    let totalBlocks = 0;
+    let totalContacts = 0;
     try {
-      const blockStats = await getBlocksStats();
-      stats = {
-        totalBlocks: blockStats.total,
-        categories: blockStats.byCategory.length,
-        recentBlocks: blockStats.recentCount
-      };
-    } catch (error) {
-      // Stats are optional, don't fail health check if they error
-      console.warn('[HEALTH] Failed to get stats:', error);
-    }
-    
-    const response: HealthResponse = {
-      status: 'healthy',
+      [totalBlocks, totalContacts] = await Promise.all([
+        prisma.block.count(),
+        prisma.contactMessage.count(),
+      ]);
+    } catch {}
+
+    const body = {
+      status: 'healthy' as const,
       timestamp: new Date().toISOString(),
       version: process.env.npm_package_version || '0.1.0',
-      uptime: Math.floor(uptime),
-      database: {
-        status: 'connected',
-        latency: dbLatency
-      },
-      stats
+      uptime: Math.floor(process.uptime()),
+      database: { status: 'connected' as const, latency: dbLatency },
+      stats: { totalBlocks, totalContacts },
     };
-    
-    const totalDuration = Date.now() - startTime;
-    
-    return NextResponse.json(response, {
-      status: HTTP_STATUS.OK,
+
+    return NextResponse.json(body, {
+      status: 200,
       headers: {
         'Content-Type': 'application/json',
         'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'X-Response-Time': `${totalDuration}ms`,
-        'X-Health-Check': 'passed'
-      }
+        'X-Response-Time': `${Date.now() - started}ms`,
+      },
     });
-    
-  } catch (error) {
-    console.error('[HEALTH] Health check failed:', error);
-    
-    const response: HealthResponse = {
-      status: 'unhealthy',
+  } catch (error: any) {
+    const body = {
+      status: 'unhealthy' as const,
       timestamp: new Date().toISOString(),
       version: process.env.npm_package_version || '0.1.0',
-      uptime: Math.floor(uptime),
-      database: {
-        status: 'error'
-      },
-      error: error instanceof Error ? error.message : 'Unknown error'
+      uptime: Math.floor(process.uptime()),
+      database: { status: 'error' as const },
+      error: error?.message || 'Unknown error',
     };
-    
-    const totalDuration = Date.now() - startTime;
-    
-    return NextResponse.json(response, {
-      status: HTTP_STATUS.SERVICE_UNAVAILABLE,
+    return NextResponse.json(body, {
+      status: 503,
       headers: {
         'Content-Type': 'application/json',
         'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'X-Response-Time': `${totalDuration}ms`,
-        'X-Health-Check': 'failed'
-      }
+        'X-Response-Time': `${Date.now() - started}ms`,
+      },
     });
   }
 }
 
-/**
- * OPTIONS /api/health
- * Handle CORS preflight requests
- */
 export async function OPTIONS() {
   return new NextResponse(null, {
     status: 200,

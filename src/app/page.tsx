@@ -2,6 +2,8 @@
 
 import React from "react";
 import { motion, Variants } from "framer-motion";
+
+
 import {
   BookOpen,
   Users,
@@ -18,6 +20,9 @@ import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
 import { useBlocks } from "@/hooks/useBlocks";
 import { Montserrat } from "next/font/google";
+import Image from "next/image";
+
+import BannerSlider from "@/components/BannerSlider";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -29,6 +34,37 @@ const montserrat = Montserrat({
 // Google Font
 import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin"], weight: ["700", "800"] });
+
+
+const slides = [
+  {
+    image: "/images/banners/banner1.png",
+   
+    
+  },
+  {
+    image: "/images/banners/banner2.png",
+    
+    
+  },
+  {
+    image: "/images/banners/banner3.png",
+   
+   
+  },
+  {
+    image: "/images/banners/banner4.png",
+   
+  },
+  {
+    image: "/images/banners/banner5.png",
+    
+    
+  },
+];
+
+
+
 
 
 
@@ -106,9 +142,11 @@ export default function HomePage() {
   return (
     <main className="min-h-screen relative overflow-hidden bg-gradient-to-br from-slate-50 via-white to-slate-50">
       <Navigation />
+      <BannerSlider slides={slides} />
       <Hero />
       
 
+      
       
 
       {/* Explore Section */}
