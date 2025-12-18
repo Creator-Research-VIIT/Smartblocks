@@ -43,7 +43,7 @@ export default function Navigation() {
   alt="Creator Research Pvt Ltd"
   width={300}
   height={190}
-  className="object-contain"
+  className="object-cover"
   priority
 />
 

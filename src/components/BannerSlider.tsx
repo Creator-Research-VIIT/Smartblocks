@@ -56,7 +56,7 @@ const BannerSlider: React.FC<BannerSliderProps> = ({ slides }) => {
       <Slider {...settings}>
         {slides.map((slide, idx) => (
           <div key={idx}>
-            <div className="relative w-full h-[250px] md:h-[350px] lg:h-[550px] ">
+            <div className="relative w-full h-[250px] md:h-[350px] lg:h-[450px] ">
               <Image
                 src={slide.image}
                 alt={"Creator"}
