@@ -13,13 +13,34 @@ import { createBlockSchema, queryParamsSchema } from '@/lib/validations';
 import { ApiResponse, BlocksResponse } from '@/lib/types';
 import { HTTP_STATUS, SUCCESS_MESSAGES, ERROR_MESSAGES } from '@/lib/constants';
 
+/* ---------------------------------- */
+/* CORS                                */
+/* ---------------------------------- */
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 };
 
-/** GET /api/blocks */
+/* ---------------------------------- */
+/* Prisma → API mapper                 */
+/* ---------------------------------- */
+function mapBlock(block: any) {
+  return {
+    id: block.id,
+    title: block.title,
+    description: block.description,
+    url: block.url,
+    color: block.color,
+    category: block.category,
+    created_at: block.createdAt,
+    updated_at: block.updatedAt,
+  };
+}
+
+/* ---------------------------------- */
+/* GET /api/blocks                     */
+/* ---------------------------------- */
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -44,7 +65,8 @@ export async function GET(request: NextRequest) {
 
     const { category, limit = 50, offset = 0, search } = params.data;
 
-    let blocks, total;
+    let blocks;
+    let total: number;
 
     if (search) {
       blocks = await searchBlocks(search, limit, offset);
@@ -58,7 +80,7 @@ export async function GET(request: NextRequest) {
       {
         success: true,
         data: {
-          blocks,
+          blocks: blocks.map(mapBlock),
           total,
           limit,
           offset,
@@ -80,7 +102,9 @@ export async function GET(request: NextRequest) {
   }
 }
 
-/** POST /api/blocks */
+/* ---------------------------------- */
+/* POST /api/blocks                    */
+/* ---------------------------------- */
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -97,12 +121,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const block = await createBlock(validated.data);
+    // ✅ FIX: convert undefined → null for Prisma
+    const block = await createBlock({
+      ...validated.data,
+      description: validated.data.description ?? null,
+    });
 
-    return NextResponse.json<ApiResponse<typeof block>>(
+    return NextResponse.json<ApiResponse<any>>(
       {
         success: true,
-        data: block,
+        data: mapBlock(block),
         message: SUCCESS_MESSAGES.BLOCK_CREATED,
       },
       { status: HTTP_STATUS.CREATED, headers: corsHeaders }
@@ -130,7 +158,9 @@ export async function POST(request: NextRequest) {
   }
 }
 
-/** OPTIONS */
+/* ---------------------------------- */
+/* OPTIONS                             */
+/* ---------------------------------- */
 export async function OPTIONS() {
   return new NextResponse(null, { status: 200, headers: corsHeaders });
 }

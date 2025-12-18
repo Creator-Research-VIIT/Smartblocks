@@ -1,5 +1,5 @@
 import prisma from '@/lib/prisma';
-import { ContactMessage } from '@prisma/client';
+import { ContactMessage, Prisma } from '@prisma/client';
 
 export type ContactFilters = {
   page?: number;
@@ -8,12 +8,13 @@ export type ContactFilters = {
   search?: string;
 };
 
-export async function createContact(data: Omit<ContactMessage,
-  'id' | 'createdAt' | 'updatedAt' | 'repliedAt' | 'isVerified' | 'status'> & {
-  captchaScore?: number | null;
-  isVerified?: boolean;
-  status?: string;
-}): Promise<ContactMessage> {
+export async function createContact(
+  data: Omit<ContactMessage, 'id' | 'createdAt' | 'updatedAt' | 'repliedAt' | 'isVerified' | 'status'> & {
+    captchaScore?: number | null;
+    isVerified?: boolean;
+    status?: string;
+  }
+): Promise<ContactMessage> {
   return prisma.contactMessage.create({
     data: {
       ...data,
@@ -24,19 +25,19 @@ export async function createContact(data: Omit<ContactMessage,
 }
 
 export async function getContacts({ page = 1, limit = 20, status, search }: ContactFilters) {
-  const where = {
+  const where: Prisma.ContactMessageWhereInput = {
     ...(status && status !== 'all' ? { status } : {}),
     ...(search
       ? {
           OR: [
-            { name: { contains: search, mode: 'insensitive' } },
-            { email: { contains: search, mode: 'insensitive' } },
-            { company: { contains: search, mode: 'insensitive' } },
-            { subject: { contains: search, mode: 'insensitive' } },
+            { name: { contains: search, mode: 'insensitive' as const } },
+            { email: { contains: search, mode: 'insensitive' as const } },
+            { company: { contains: search, mode: 'insensitive' as const } },
+            { subject: { contains: search, mode: 'insensitive' as const } },
           ],
         }
       : {}),
-  } as const;
+  };
 
   const [contacts, total] = await Promise.all([
     prisma.contactMessage.findMany({
@@ -51,6 +52,10 @@ export async function getContacts({ page = 1, limit = 20, status, search }: Cont
   return { contacts, total, totalPages: Math.ceil(total / limit) };
 }
 
+export async function getContactById(id: number) {
+  return prisma.contactMessage.findUnique({ where: { id } });
+}
+
 export async function updateContactStatus(
   id: number,
   status: string,
@@ -58,7 +63,7 @@ export async function updateContactStatus(
   repliedBy?: string
 ) {
   try {
-    const contact = await prisma.contactMessage.update({
+    return await prisma.contactMessage.update({
       where: { id },
       data: {
         status,
@@ -67,21 +72,16 @@ export async function updateContactStatus(
         repliedAt: status === 'replied' ? new Date() : undefined,
       },
     });
-    return contact;
   } catch (e) {
     return null;
   }
-}
-
-export async function getContactById(id: number) {
-  return prisma.contactMessage.findUnique({ where: { id } });
 }
 
 export async function updateContact(id: number, data: Partial<ContactMessage>) {
   try {
     const { id: _omit, createdAt: _c, updatedAt: _u, ...rest } = data as any;
     return await prisma.contactMessage.update({ where: { id }, data: rest });
-  } catch (e) {
+  } catch {
     return null;
   }
 }

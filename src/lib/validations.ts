@@ -98,9 +98,26 @@ export const updateBlockSchema = z.object({
 // Query parameters schema
 export const queryParamsSchema = z.object({
   category: z.enum(CATEGORIES).optional(),
-  limit: z.string().transform(Number).pipe(z.number().min(1).max(100)).optional(),
-  offset: z.string().transform(Number).pipe(z.number().min(0)).optional()
+
+  limit: z
+    .string()
+    .transform(Number)
+    .pipe(z.number().min(1).max(100))
+    .optional(),
+
+  offset: z
+    .string()
+    .transform(Number)
+    .pipe(z.number().min(0))
+    .optional(),
+
+  search: z
+    .string()
+    .trim()
+    .min(1)
+    .optional(), // ✅ ADD THIS
 });
+
 
 // Contact form schema
 export const contactFormSchema = z.object({

@@ -7,8 +7,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface Slide {
   image: string;
-  title: string;
-  subtitle: string;
+ 
 }
 
 interface BannerSliderProps {
@@ -57,17 +56,17 @@ const BannerSlider: React.FC<BannerSliderProps> = ({ slides }) => {
       <Slider {...settings}>
         {slides.map((slide, idx) => (
           <div key={idx}>
-            <div className="relative w-full h-[250px] md:h-[350px] lg:h-[450px]">
+            <div className="relative w-full h-[250px] md:h-[350px] lg:h-[550px] ">
               <Image
                 src={slide.image}
-                alt={slide.title}
+                alt={"Creator"}
                 fill
-                className="object-contain"
+                className="object-cover"
+                
                 priority={idx === 0}
               />
-              <div className="absolute inset-0 flex flex-col justify-center items-center text-white">
-                <h2 className="text-3xl md:text-4xl font-bold drop-shadow-lg">{slide.title}</h2>
-                <p className="text-lg md:text-xl mt-2 drop-shadow-lg">{slide.subtitle}</p>
+              <div className="absolute inset-0 flex flex-col justify-center items-center text-white ">
+                
               </div>
             </div>
           </div>

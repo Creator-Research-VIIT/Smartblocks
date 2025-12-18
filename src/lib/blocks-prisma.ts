@@ -10,9 +10,23 @@ export async function getBlocks(category?: string, limit = 50, offset = 0): Prom
   });
 }
 
-export async function getBlocksCount(category?: string): Promise<number> {
-  return prisma.block.count({ where: category ? { category } : undefined });
+export async function getBlocksCount(
+  category?: string,
+  search?: string
+): Promise<number> {
+  return prisma.block.count({
+    where: {
+      ...(category && { category }),
+      ...(search && {
+        OR: [
+          { title: { contains: search, mode: 'insensitive' } },
+          { description: { contains: search, mode: 'insensitive' } },
+        ],
+      }),
+    },
+  });
 }
+
 
 export async function getBlockById(id: number): Promise<Block | null> {
   return prisma.block.findUnique({ where: { id } });
@@ -41,10 +55,14 @@ export async function deleteBlock(id: number): Promise<boolean> {
     return false;
   }
 }
-
-export async function searchBlocks(term: string, limit = 20): Promise<Block[]> {
+export async function searchBlocks(
+  term: string,
+  limit = 20,
+  offset = 0
+): Promise<Block[]> {
   const q = term.trim();
   if (!q) return [];
+
   return prisma.block.findMany({
     where: {
       OR: [
@@ -52,7 +70,8 @@ export async function searchBlocks(term: string, limit = 20): Promise<Block[]> {
         { description: { contains: q, mode: 'insensitive' } },
       ],
     },
-    orderBy: [{ createdAt: 'desc' }],
+    orderBy: { createdAt: 'desc' },
+    skip: offset,   // ✅ pagination
     take: limit,
   });
 }
