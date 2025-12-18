@@ -254,7 +254,7 @@ export function ContactForm({ className }: ContactFormProps) {
                 errors.name &&
                   "border-red-500 focus:border-red-500 focus:ring-red-500"
               )}
-              placeholder="John Doe"
+              placeholder=""
               disabled={isSubmitting}
             />
             {errors.name && <p className="form-error">{errors.name}</p>}
@@ -275,7 +275,7 @@ export function ContactForm({ className }: ContactFormProps) {
                 errors.email &&
                   "border-red-500 focus:border-red-500 focus:ring-red-500"
               )}
-              placeholder="john@example.com"
+              placeholder="example@gmail.com"
               disabled={isSubmitting}
             />
             {errors.email && <p className="form-error">{errors.email}</p>}
